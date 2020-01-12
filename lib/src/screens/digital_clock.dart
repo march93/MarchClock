@@ -8,16 +8,16 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'settings/enums.dart';
-import 'settings/themes.dart';
+import '../settings/enums.dart';
+import '../settings/themes.dart';
 
 /// A basic digital clock.
 ///
 /// You can do better than this!
 class DigitalClock extends StatefulWidget {
-  const DigitalClock(this.model);
+  final ClockModel _model;
 
-  final ClockModel model;
+  const DigitalClock({@required ClockModel model}) : _model = model;
 
   @override
   _DigitalClockState createState() => _DigitalClockState();
@@ -30,7 +30,7 @@ class _DigitalClockState extends State<DigitalClock> {
   @override
   void initState() {
     super.initState();
-    widget.model.addListener(_updateModel);
+    widget._model.addListener(_updateModel);
     _updateTime();
     _updateModel();
   }
@@ -38,17 +38,17 @@ class _DigitalClockState extends State<DigitalClock> {
   @override
   void didUpdateWidget(DigitalClock oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.model != oldWidget.model) {
-      oldWidget.model.removeListener(_updateModel);
-      widget.model.addListener(_updateModel);
+    if (widget._model != oldWidget._model) {
+      oldWidget._model.removeListener(_updateModel);
+      widget._model.addListener(_updateModel);
     }
   }
 
   @override
   void dispose() {
     _timer?.cancel();
-    widget.model.removeListener(_updateModel);
-    widget.model.dispose();
+    widget._model.removeListener(_updateModel);
+    widget._model.dispose();
     super.dispose();
   }
 
@@ -84,7 +84,7 @@ class _DigitalClockState extends State<DigitalClock> {
         ? ClockTheme.lightTheme
         : ClockTheme.darkTheme;
     final hour =
-        DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
+        DateFormat(widget._model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
     final fontSize = MediaQuery.of(context).size.width / 3.5;
     final offset = -fontSize / 7;

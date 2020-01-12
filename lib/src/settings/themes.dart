@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'enums.dart';
 
 class ClockTheme {
-  
-
   static final lightTheme = {
     ClockElement.background: Color(0xFF81B3FE),
     ClockElement.text: Colors.white,
