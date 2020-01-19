@@ -69,27 +69,25 @@ class _DigitalClockState extends State<DigitalClock> {
   }
 
   void _updateTime() {
-    setState(() {
-      _dateTime = DateTime.now();
+    _dateTime = DateTime.now();
 
-      // Add the new updated time to the stream
-      _clockLogicBloc?.changeDate(_dateTime);
+    // Add the new updated time to the stream
+    _clockLogicBloc?.changeDate(_dateTime);
 
-      // Update once per minute. If you want to update every second, use the
-      // following code.
-      _timer = Timer(
-        Duration(minutes: 1) -
-            Duration(seconds: _dateTime.second) -
-            Duration(milliseconds: _dateTime.millisecond),
-        _updateTime,
-      );
-      // Update once per second, but make sure to do it at the beginning of each
-      // new second, so that the clock is accurate.
-      // _timer = Timer(
-      //   Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
-      //   _updateTime,
-      // );
-    });
+    // Update once per minute. If you want to update every second, use the
+    // following code.
+    _timer = Timer(
+      Duration(minutes: 1) -
+          Duration(seconds: _dateTime.second) -
+          Duration(milliseconds: _dateTime.millisecond),
+      _updateTime,
+    );
+    // Update once per second, but make sure to do it at the beginning of each
+    // new second, so that the clock is accurate.
+    // _timer = Timer(
+    //   Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
+    //   _updateTime,
+    // );
   }
 
   @override
@@ -121,8 +119,8 @@ class _DigitalClockState extends State<DigitalClock> {
           style: defaultStyle,
           child: Row(
             children: <Widget>[
-              Expanded(child: NumberFlip(timeString: hour[0], clockDigit: ClockDigit.hour1)),
-              Expanded(child: NumberFlip(timeString: hour[1], clockDigit: ClockDigit.hour2)),
+              Expanded(child: NumberFlip(hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh', timeString: hour[0], clockDigit: ClockDigit.hour1)),
+              Expanded(child: NumberFlip(hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh', timeString: hour[1], clockDigit: ClockDigit.hour2)),
               Expanded(child: Text(':')),
               Expanded(child: NumberFlip(timeString: minute[0], clockDigit: ClockDigit.minute1)),
               Expanded(child: NumberFlip(timeString: minute[1], clockDigit: ClockDigit.minute2)),
