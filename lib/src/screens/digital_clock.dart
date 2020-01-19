@@ -34,9 +34,7 @@ class _DigitalClockState extends State<DigitalClock> {
   @override
   void initState() {
     super.initState();
-    widget._model.addListener(_updateModel);
     _updateTime();
-    _updateModel();
   }
 
   @override
@@ -46,26 +44,10 @@ class _DigitalClockState extends State<DigitalClock> {
   }
 
   @override
-  void didUpdateWidget(DigitalClock oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget._model != oldWidget._model) {
-      oldWidget._model.removeListener(_updateModel);
-      widget._model.addListener(_updateModel);
-    }
-  }
-
-  @override
   void dispose() {
     _timer?.cancel();
-    widget._model.removeListener(_updateModel);
     widget._model.dispose();
     super.dispose();
-  }
-
-  void _updateModel() {
-    setState(() {
-      // Cause the clock to rebuild when the model changes.
-    });
   }
 
   void _updateTime() {
