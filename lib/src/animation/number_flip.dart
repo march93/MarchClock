@@ -80,7 +80,6 @@ class _NumberFlipState extends State<NumberFlip> with SingleTickerProviderStateM
             break;
         }
 
-        // _animationController.forward().whenComplete(_animationController.reset);
         _animationController.forward();
 
         if (prevTimeDigit == currTimeDigit) {
