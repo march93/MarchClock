@@ -7,7 +7,10 @@ import 'dart:async';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
+import '../animation/number_flip.dart';
+import '../blocs/clock_logic_bloc.dart';
 import '../settings/enums.dart';
 import '../settings/themes.dart';
 
@@ -26,6 +29,7 @@ class DigitalClock extends StatefulWidget {
 class _DigitalClockState extends State<DigitalClock> {
   DateTime _dateTime = DateTime.now();
   Timer _timer;
+  ClockLogicBloc _clockLogicBloc;
 
   @override
   void initState() {
@@ -33,6 +37,12 @@ class _DigitalClockState extends State<DigitalClock> {
     widget._model.addListener(_updateModel);
     _updateTime();
     _updateModel();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _clockLogicBloc ??= Provider.of<ClockLogicBloc>(context);
   }
 
   @override
@@ -61,6 +71,10 @@ class _DigitalClockState extends State<DigitalClock> {
   void _updateTime() {
     setState(() {
       _dateTime = DateTime.now();
+
+      // Add the new updated time to the stream
+      _clockLogicBloc?.changeDate(_dateTime);
+
       // Update once per minute. If you want to update every second, use the
       // following code.
       _timer = Timer(
@@ -86,8 +100,7 @@ class _DigitalClockState extends State<DigitalClock> {
     final hour =
         DateFormat(widget._model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 3.5;
-    final offset = -fontSize / 7;
+    final fontSize = MediaQuery.of(context).size.width / 6.5;
     final defaultStyle = TextStyle(
       color: colors[ClockElement.text],
       fontFamily: 'PressStart2P',
@@ -106,10 +119,13 @@ class _DigitalClockState extends State<DigitalClock> {
       child: Center(
         child: DefaultTextStyle(
           style: defaultStyle,
-          child: Stack(
+          child: Row(
             children: <Widget>[
-              Positioned(left: offset, top: 0, child: Text(hour)),
-              Positioned(right: offset, bottom: offset, child: Text(minute)),
+              Expanded(child: NumberFlip(timeString: hour[0], clockDigit: ClockDigit.hour1)),
+              Expanded(child: NumberFlip(timeString: hour[1], clockDigit: ClockDigit.hour2)),
+              Expanded(child: Text(':')),
+              Expanded(child: NumberFlip(timeString: minute[0], clockDigit: ClockDigit.minute1)),
+              Expanded(child: NumberFlip(timeString: minute[1], clockDigit: ClockDigit.minute2)),
             ],
           ),
         ),
