@@ -30,6 +30,7 @@ class _DigitalClockState extends State<DigitalClock> {
   DateTime _dateTime = DateTime.now();
   Timer _timer;
   ClockLogicBloc _clockLogicBloc;
+  bool _shouldFlip = true;
 
   @override
   void initState() {
@@ -53,8 +54,20 @@ class _DigitalClockState extends State<DigitalClock> {
   void _updateTime() {
     _dateTime = DateTime.now();
 
+    // Allow digits to be flipped
+    setState(() {
+      _shouldFlip = true;
+    });
+
     // Add the new updated time to the stream
     _clockLogicBloc?.changeDate(_dateTime);
+
+    // Prevent digits from flipping
+    setState(() {
+      Future.delayed(Duration(seconds: 1), () {
+        _shouldFlip = false;
+      });
+    });
 
     // Update once per minute. If you want to update every second, use the
     // following code.
@@ -89,7 +102,8 @@ class _DigitalClockState extends State<DigitalClock> {
                 child: NumberFlip(
                   hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh',
                   timeString: hour[0],
-                  clockDigit: ClockDigit.hour1
+                  clockDigit: ClockDigit.hour1,
+                  shouldFlip: _shouldFlip,
                 ),
               ),
               Expanded(
@@ -97,7 +111,8 @@ class _DigitalClockState extends State<DigitalClock> {
                 child: NumberFlip(
                   hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh',
                   timeString: hour[1],
-                  clockDigit: ClockDigit.hour2
+                  clockDigit: ClockDigit.hour2,
+                  shouldFlip: _shouldFlip,
                 ),
               ),
               Container(
@@ -115,14 +130,16 @@ class _DigitalClockState extends State<DigitalClock> {
                 flex: 3,
                 child: NumberFlip(
                   timeString: minute[0],
-                  clockDigit: ClockDigit.minute1
+                  clockDigit: ClockDigit.minute1,
+                  shouldFlip: _shouldFlip,
                 ),
               ),
               Expanded(
                 flex: 3,
                 child: NumberFlip(
                   timeString: minute[1],
-                  clockDigit: ClockDigit.minute2
+                  clockDigit: ClockDigit.minute2,
+                  shouldFlip: _shouldFlip,
                 ),
               ),
             ],
