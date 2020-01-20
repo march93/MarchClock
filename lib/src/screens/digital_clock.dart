@@ -74,31 +74,14 @@ class _DigitalClockState extends State<DigitalClock> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).brightness == Brightness.light
-        ? ClockTheme.lightTheme
-        : ClockTheme.darkTheme;
-    final hour =
-        DateFormat(widget._model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
+    final hour = DateFormat(widget._model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 6.5;
-    final defaultStyle = TextStyle(
-      color: colors[ClockElement.text],
-      fontFamily: 'PressStart2P',
-      fontSize: fontSize,
-      shadows: [
-        Shadow(
-          blurRadius: 0,
-          color: colors[ClockElement.shadow],
-          offset: Offset(10, 0),
-        ),
-      ],
-    );
 
     return Container(
-      color: colors[ClockElement.background],
+      color: ClockTheme.colors(context: context)[ClockElement.background],
       child: Center(
         child: DefaultTextStyle(
-          style: defaultStyle,
+          style: ClockTheme.defaultStyle(context: context),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -119,9 +102,10 @@ class _DigitalClockState extends State<DigitalClock> {
               ),
               Container(
                 width: 55,
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).orientation == Orientation.landscape
+                  ? MediaQuery.of(context).size.height / 3
+                  : MediaQuery.of(context).size.height / 10,
                 padding: EdgeInsets.only(left: 5),
-
                 child: FittedBox(
                   fit: BoxFit.cover,
                   child: Text(':'),

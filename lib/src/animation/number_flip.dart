@@ -55,7 +55,6 @@ class _NumberFlipState extends State<NumberFlip> with SingleTickerProviderStateM
         // Display initial time passed from parent widget
         // Time has not updated yet so there's nothing in the stream
         if (!snapshot.hasData) {
-          // return Text('${(int.parse(widget._timeString)).toString()}');
           return digitContainer(context: context, text: int.parse(widget._timeString).toString());
         }
 
@@ -102,10 +101,6 @@ class _NumberFlipState extends State<NumberFlip> with SingleTickerProviderStateM
   }
 
   Widget digitContainer({BuildContext context, String text}) {
-    final colors = Theme.of(context).brightness == Brightness.light
-        ? ClockTheme.lightTheme
-        : ClockTheme.darkTheme;
-
     return Card(
       color: Colors.white10,
       elevation: 3,
@@ -114,18 +109,7 @@ class _NumberFlipState extends State<NumberFlip> with SingleTickerProviderStateM
         height: MediaQuery.of(context).size.height,
         child: Text(text,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: colors[ClockElement.text],
-            fontFamily: 'PressStart2P',
-            fontSize: MediaQuery.of(context).size.width / 6,
-            shadows: [
-              Shadow(
-                blurRadius: 0,
-                color: colors[ClockElement.shadow],
-                offset: Offset(10, 0),
-              ),
-            ],
-          ),
+          style: ClockTheme.defaultStyle(context: context),
         ),
       ),
     );
