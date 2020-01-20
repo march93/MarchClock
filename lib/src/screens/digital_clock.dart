@@ -101,11 +101,46 @@ class _DigitalClockState extends State<DigitalClock> {
           style: defaultStyle,
           child: Row(
             children: <Widget>[
-              Expanded(child: NumberFlip(hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh', timeString: hour[0], clockDigit: ClockDigit.hour1)),
-              Expanded(child: NumberFlip(hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh', timeString: hour[1], clockDigit: ClockDigit.hour2)),
-              Expanded(child: Text(':')),
-              Expanded(child: NumberFlip(timeString: minute[0], clockDigit: ClockDigit.minute1)),
-              Expanded(child: NumberFlip(timeString: minute[1], clockDigit: ClockDigit.minute2)),
+              Expanded(
+                flex: 3,
+                child: NumberFlip(
+                  hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh',
+                  timeString: hour[0],
+                  clockDigit: ClockDigit.hour1
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: NumberFlip(
+                  hourFormat: widget._model.is24HourFormat ? 'HH' : 'hh',
+                  timeString: hour[1],
+                  clockDigit: ClockDigit.hour2
+                ),
+              ),
+              Container(
+                width: 55,
+                height: MediaQuery.of(context).size.height / 3,
+                padding: EdgeInsets.only(left: 5),
+
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Text(':'),
+                )
+              ),
+              Expanded(
+                flex: 3,
+                child: NumberFlip(
+                  timeString: minute[0],
+                  clockDigit: ClockDigit.minute1
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: NumberFlip(
+                  timeString: minute[1],
+                  clockDigit: ClockDigit.minute2
+                ),
+              ),
             ],
           ),
         ),

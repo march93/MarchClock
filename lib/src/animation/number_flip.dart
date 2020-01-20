@@ -1,3 +1,4 @@
+import 'package:digital_clock/src/settings/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flip_view/flutter_flip_view.dart';
 import 'package:intl/intl.dart';
@@ -54,7 +55,8 @@ class _NumberFlipState extends State<NumberFlip> with SingleTickerProviderStateM
         // Display initial time passed from parent widget
         // Time has not updated yet so there's nothing in the stream
         if (!snapshot.hasData) {
-          return Text('${(int.parse(widget._timeString)).toString()}');
+          // return Text('${(int.parse(widget._timeString)).toString()}');
+          return digitContainer(context: context, text: int.parse(widget._timeString).toString());
         }
 
         // Previous Time (minus 1 minute)
@@ -84,19 +86,48 @@ class _NumberFlipState extends State<NumberFlip> with SingleTickerProviderStateM
 
         if (prevTimeDigit == currTimeDigit) {
           // The digit in this case hasn't changed so no need to animate
-          return Text(currTimeDigit);
+          return digitContainer(context: context, text: prevTimeDigit);
         } else {
           // We no have data in the stream so we can set the back of the
           // flip animation to contain the updated time, and the front will
           // contain the previous time
           return FlipView(
             animationController: _curvedAnimation,
-            back: Text(currTimeDigit),
-            front: Text(prevTimeDigit),
+            back: digitContainer(context: context, text: currTimeDigit),
+            front: digitContainer(context: context, text: prevTimeDigit)
           );
         }
-        
       }
+    );
+  }
+
+  Widget digitContainer({BuildContext context, String text}) {
+    final colors = Theme.of(context).brightness == Brightness.light
+        ? ClockTheme.lightTheme
+        : ClockTheme.darkTheme;
+
+    return Card(
+      color: Colors.white10,
+      elevation: 3,
+      child: Container(
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height,
+        child: Text(text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: colors[ClockElement.text],
+            fontFamily: 'PressStart2P',
+            fontSize: MediaQuery.of(context).size.width / 6,
+            shadows: [
+              Shadow(
+                blurRadius: 0,
+                color: colors[ClockElement.shadow],
+                offset: Offset(10, 0),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
